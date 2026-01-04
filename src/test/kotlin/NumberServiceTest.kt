@@ -41,4 +41,19 @@ class NumberServiceTest{
         // then
         assertEquals(1, service.fetchedNumber)
     }
+
+    @Test
+    fun use_test_dispatcher() {
+        // given
+        val dispatcher = StandardTestDispatcher()
+        val service = NumberService(dispatcher)
+
+        // when
+        service.fetchNumberAsync()
+
+        dispatcher.scheduler.advanceUntilIdle()
+
+        // then
+        assertEquals(1, service.fetchedNumber)
+    }
 }
