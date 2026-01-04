@@ -23,7 +23,7 @@ class NumberServiceTest{
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun use_scheduler() {
+    fun use_TestCoroutineScheduler() {
         // given
         val scheduler = TestCoroutineScheduler()
         val dispatcher = StandardTestDispatcher(scheduler)
@@ -42,7 +42,7 @@ class NumberServiceTest{
     }
 
     @Test
-    fun use_test_dispatcher() {
+    fun use_StandardTestDispatcher() {
         // given
         val dispatcher = StandardTestDispatcher()
         val service = NumberService(dispatcher)
@@ -58,7 +58,7 @@ class NumberServiceTest{
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun use_test_scope() {
+    fun use_TestScope() {
         val dispatcher = StandardTestDispatcher()
         val scope = TestScope(dispatcher)
         val service = NumberService(dispatcher)
@@ -72,7 +72,7 @@ class NumberServiceTest{
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun use_run_test() = runTest {
+    fun use_runTest() = runTest {
         // given
         val dispatcher = StandardTestDispatcher(testScheduler)
         val service = NumberService(dispatcher)
