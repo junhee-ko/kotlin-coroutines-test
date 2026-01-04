@@ -1,3 +1,4 @@
+import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -6,7 +7,8 @@ class NumberServiceTest{
     @Test
     fun wrong_test() {
         // given
-        val service = NumberService()
+        val coroutineDispatcher = Dispatchers.IO
+        val service = NumberService(coroutineDispatcher)
 
         // when
         service.fetchNumberAsync()
