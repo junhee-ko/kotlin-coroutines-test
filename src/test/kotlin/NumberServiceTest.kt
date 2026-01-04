@@ -1,9 +1,6 @@
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -70,6 +67,22 @@ class NumberServiceTest{
 
         scope.advanceUntilIdle()
 
+        assertEquals(1, service.fetchedNumber)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun use_run_test() = runTest {
+        // given
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        val service = NumberService(dispatcher)
+
+        // when
+        service.fetchNumberAsync()
+
+        advanceUntilIdle()
+
+        // then
         assertEquals(1, service.fetchedNumber)
     }
 }
