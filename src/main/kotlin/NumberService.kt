@@ -1,14 +1,14 @@
 import kotlinx.coroutines.*
 
 class NumberService(
-    private val coroutineDispatcher: CoroutineDispatcher
+    private val coroutineScope: CoroutineScope
 ) {
 
     var fetchedNumber: Int = 0
         private set
 
     fun fetchNumberAsync() {
-        CoroutineScope(coroutineDispatcher).launch {
+        coroutineScope.launch {
             delay(5_000)
             fetchedNumber = 1
         }
