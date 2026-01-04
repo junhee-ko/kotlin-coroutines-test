@@ -1,3 +1,4 @@
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
@@ -9,8 +10,10 @@ class NumberServiceTest{
     @Test
     fun wrong_test() {
         // given
-        val coroutineDispatcher = Dispatchers.IO
-        val service = NumberService(coroutineDispatcher)
+        val dispatcher = Dispatchers.IO
+        val scope = CoroutineScope(dispatcher)
+
+        val service = NumberService(scope)
 
         // when
         service.fetchNumberAsync()
@@ -27,8 +30,9 @@ class NumberServiceTest{
         // given
         val scheduler = TestCoroutineScheduler()
         val dispatcher = StandardTestDispatcher(scheduler)
+        val scope = CoroutineScope(dispatcher)
 
-        val service = NumberService(dispatcher)
+        val service = NumberService(scope)
 
         // when
         service.fetchNumberAsync()
@@ -45,7 +49,9 @@ class NumberServiceTest{
     fun use_StandardTestDispatcher() {
         // given
         val dispatcher = StandardTestDispatcher()
-        val service = NumberService(dispatcher)
+        val scope = CoroutineScope(dispatcher)
+
+        val service = NumberService(scope)
 
         // when
         service.fetchNumberAsync()
@@ -61,7 +67,8 @@ class NumberServiceTest{
     fun use_TestScope() {
         val dispatcher = StandardTestDispatcher()
         val scope = TestScope(dispatcher)
-        val service = NumberService(dispatcher)
+
+        val service = NumberService(scope)
 
         service.fetchNumberAsync()
 
@@ -74,8 +81,7 @@ class NumberServiceTest{
     @Test
     fun use_runTest() = runTest {
         // given
-        val dispatcher = StandardTestDispatcher(testScheduler)
-        val service = NumberService(dispatcher)
+        val service = NumberService(this)
 
         // when
         service.fetchNumberAsync()
