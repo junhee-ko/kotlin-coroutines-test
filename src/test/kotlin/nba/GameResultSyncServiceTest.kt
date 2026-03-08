@@ -1,7 +1,10 @@
 package nba
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -27,6 +30,7 @@ class GameResultSyncServiceTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `경기 결과를 저장한다`() {
         // given
@@ -37,17 +41,17 @@ class GameResultSyncServiceTest {
             )
         )
         val fakeRepository = FakeGameResultRepository()
-        val standardTestDispatcher = StandardTestDispatcher()
+        val testScope = TestScope()
 
         val gameResultSyncService = GameResultSyncService(
             apiClient = fakeApiClient,
             repository = fakeRepository,
-            dispatcher = standardTestDispatcher,
+            coroutineScope = testScope,
         )
 
         // when
         gameResultSyncService.sync()
-        standardTestDispatcher.scheduler.advanceUntilIdle()
+        testScope.advanceUntilIdle()
 
         // then
         assertEquals(2, fakeRepository.savedGames.size)
