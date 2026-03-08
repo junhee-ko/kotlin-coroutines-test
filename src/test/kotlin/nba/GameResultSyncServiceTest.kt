@@ -1,6 +1,7 @@
 package nba
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -36,15 +37,17 @@ class GameResultSyncServiceTest {
             )
         )
         val fakeRepository = FakeGameResultRepository()
+        val standardTestDispatcher = StandardTestDispatcher()
 
         val gameResultSyncService = GameResultSyncService(
             apiClient = fakeApiClient,
-            repository = fakeRepository
+            repository = fakeRepository,
+            dispatcher = standardTestDispatcher,
         )
 
         // when
         gameResultSyncService.sync()
-        Thread.sleep(1_000)
+        standardTestDispatcher.scheduler.advanceUntilIdle()
 
         // then
         assertEquals(2, fakeRepository.savedGames.size)
