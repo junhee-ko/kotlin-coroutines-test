@@ -44,6 +44,7 @@ class GameResultSyncServiceTest {
 
         // when
         gameResultSyncService.sync()
+        Thread.sleep(1_000)
 
         // then
         assertEquals(2, fakeRepository.savedGames.size)
